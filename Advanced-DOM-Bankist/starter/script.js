@@ -91,9 +91,11 @@ const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 
 btnScrollTo.addEventListener('click', function () {
-  const s1coords = section1.getBoundingClientRect(); // get the position of the section1 element
-  console.log(s1coords); // get the position of the section1 element
-  console.log('Current scroll (X/Y)', window.scrollX, window.scrollY); // get the current scroll position
+  section1.scrollIntoView({ behavior: 'smooth' }); // smooth scrolling to the section1 element
+
+  // const s1coords = section1.getBoundingClientRect(); // get the position of the section1 element
+  // console.log(s1coords); // get the position of the section1 element
+  // console.log('Current scroll (X/Y)', window.scrollX, window.scrollY); // get the current scroll position
 
   // scrolling to the section1 element
   // window.scrollTo(
@@ -102,8 +104,35 @@ btnScrollTo.addEventListener('click', function () {
   // );
 
   // OR
-  section1.scrollIntoView({ behavior: 'smooth' }); // smooth scrolling to the section1 element
 });
+
+// Pagination
+
+// inefficient way
+// document.querySelectorAll('.nav__link').forEach(function (el) {
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault(); // prevent the default behavior of the link
+//     const id = this.getAttribute('href'); // get the href attribute of the link
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' }); // smooth scrolling to the section
+//   });
+// });
+
+// efficient way (event delegation)
+// algorithm
+// 1. add event listener to the parent element
+// 2. use event.target to get the element that triggered the event
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault(); // prevent the default behavior of the link
+  console.log(e.target);
+  // matching strategy
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href'); // get the href attribute of the link
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' }); // smooth scrolling to the section
+  }
+});
+// ///////////////////////////////////
+//////////////////////////////////
 
 // console.log(section1.getBoundingClientRect()); // get the position of the section1 element
 // console.log(section1.getBoundingClientRect().height); // get the height of the section1 element
@@ -120,3 +149,38 @@ btnScrollTo.addEventListener('click', function () {
 // console.log(section1.getBoundingClientRect().left); // get the left position of the section1 element
 // console.log(section1.getBoundingClientRect().right); // get the right position of the section1 element
 // console.log(section1.getBoundingClientRect().bottom); // get the bottom position of the section1 element
+
+// event capturing and bubbling
+
+// rgb(10, 95, 225);
+
+// const randomInt = (min, max) =>
+//   Math.floor(Math.random() * (max - min + 1)) + min;
+// const randomColor = () =>
+//   `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+// // console.log(randomColor());
+
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log('e.target', e.target); // target the element that triggered the event
+//   console.log('e.currentTarget', e.currentTarget); // target the element that is listening to the event
+//   console.log(e.currentTarget === this); // true
+//   // stop propagation of the event
+//   e.stopPropagation(); // stop the event from bubbling up to the parent elements
+// });
+
+// document.querySelector('.nav__links').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log('e.target', e.target); // target the element that triggered the event
+//   console.log('e.currentTarget', e.currentTarget); // target the element that is listening to the event
+// });
+
+// document.querySelector('.nav').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log('e.target', e.target); // target the element that triggered the event
+//   console.log('e.currentTarget', e.currentTarget); // target the element that is listening to the event
+// });
+
+// document.querySelector('body').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+// });
